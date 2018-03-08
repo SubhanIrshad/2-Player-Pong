@@ -4,7 +4,6 @@ var ball = function(room){
     this.currentRoom = room;
     this.defaultSpeed = 10;
     this.speed = 10;
-    this.speedMod = 5;
 
     var angle = Math.random() * (Math.PI * 2);
     this.dy = Math.sin(angle) * this.speed;

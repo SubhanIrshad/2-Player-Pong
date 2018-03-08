@@ -1,4 +1,4 @@
-var ball = require("./ball.js");
+var ball = require("./ball");
 
 var MAX_PLAYERS = 2;
 var allRooms = [];

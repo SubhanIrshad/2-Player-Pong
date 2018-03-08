@@ -82,7 +82,6 @@ setInterval(function(){
                 }
                 var angle = Math.atan2(room.allRooms[i].ball.info.y - p.info.y, room.allRooms[i].ball.info.x - p.info.x);
 
-                room.allRooms[i].ball.speed += room.allRooms[i].ball.speedMod;
                 room.allRooms[i].ball.dy = Math.sin(angle) * room.allRooms[i].ball.speed;
                 room.allRooms[i].ball.dx = Math.cos(angle) * room.allRooms[i].ball.speed;
             }
