@@ -9,10 +9,39 @@ ctx.fillStyle = "black";
 ctx.font="18px Arial";
 ctx.textAlign="center";
 
+var playing = false;
+var filled = false;
+var countdownPopup = false;
+var countdown = 0;
+
 var socket = io.connect();
 
 // Sends and prompts client for name
 socket.emit("login", prompt("Enter your name"));
+
+socket.on("filled", function(data){
+    if(data.filled) {
+        filled = data.filled;
+    } else {
+        filled = data.filled;
+        playing = false;
+    }
+    console.log(filled);
+    countdownPopup = data.filled;
+    countdown = data.time;
+    var count = setInterval(function(){
+        countdown -= 1;
+
+        if(countdown <= 0){
+            countdownPopup = false;
+            clearInterval(count);
+        }
+    },1000);
+});
+
+socket.on("start", function(){
+    playing = true;
+});
 
 // Draws game based on information passed (an array)
 socket.on("message", function(data){
@@ -20,7 +49,7 @@ socket.on("message", function(data){
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draws border
+    // Draws border and text
     ctx.strokeStyle = "white";
     ctx.strokeWidth = 10;
     ctx.beginPath();
@@ -31,6 +60,20 @@ socket.on("message", function(data){
     ctx.lineTo(0, 0);
     ctx.closePath();
     ctx.stroke();
+
+    ctx.fillStyle = "white";
+    ctx.fillText("use the arrow keys to move up or down!", 250, 550);
+
+    if(!filled){
+        ctx.fillStyle = "white";
+        ctx.fillText("Waiting for another player...", 250, 220);
+    }
+
+    // Draws and displays time remaining before game starts on canvas
+    if(countdownPopup && !playing && filled){
+        ctx.fillStyle = "white";
+        ctx.fillText("Game Start in: " + countdown, 250, 220);
+    }
 
     // Loops through the array passed (draws players)
     var info = data;

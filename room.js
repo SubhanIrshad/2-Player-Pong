@@ -2,6 +2,7 @@ var ball = require("./ball");
 
 var MAX_PLAYERS = 2;
 var allRooms = [];
+var countdown = 5000;
 
 // Represents slots in game (stores location and status)
 function s1(){
@@ -38,12 +39,18 @@ room.prototype.startGame = function(){
 
     if(this.slot1.occupied && this.slot2.occupied){
 
-        console.log("starting game in 5 seconds!");
+        this.slot1.player.socket.emit("filled", {"time":countdown/1000, "filled": true});
+        this.slot2.player.socket.emit("filled", {"time":countdown/1000, "filled": true});
+
+        console.log("starting game in " + countdown/1000 + "  seconds!");
         setTimeout(function(){
             this.playing = true;
             this.slot1.player.info.points = 0;
             this.slot2.player.info.points = 0;
-        }.bind(this), 5000);
+
+            this.slot1.player.socket.emit("start");
+            this.slot2.player.socket.emit("start");
+        }.bind(this), countdown);
         return true;
     }
     this.playing = false;

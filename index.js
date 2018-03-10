@@ -51,10 +51,12 @@ io.on("connection", function(socket){
             p.currentRoom.playing = false;
 
             if(p.currentRoom.slot1.player != undefined) {
+                p.currentRoom.slot1.player.socket.emit("filled", {"time": 1, "filled": false});
                 p.currentRoom.slot1.player.info.points = 0;
             }
 
             if(p.currentRoom.slot2.player != undefined) {
+                p.currentRoom.slot2.player.socket.emit("filled", {"time": 1, "filled": false});
                 p.currentRoom.slot2.player.info.points = 0;
             }
             p.currentRoom.ball.respawn();
